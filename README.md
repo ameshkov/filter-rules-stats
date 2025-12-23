@@ -2,6 +2,11 @@
 
 A command-line tool that analyzes ad-blocking filter lists and generates statistical reports. Uses the `@adguard/agtree` library to parse filter rules and outputs comprehensive statistics about rule composition, modifier usage, scriptlets, and redirect resources.
 
+The stats are published daily to [https://ameshkov.github.io/filter-rules-stats/](https://ameshkov.github.io/filter-rules-stats/).
+
+If you'd like to change the set of filter lists analyzed, you can modify the
+configuration file at `config.yaml`.
+
 ## Features
 
 - **Multi-source Analysis**: Download and analyze filter lists from multiple URLs
