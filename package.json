@@ -23,7 +23,7 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "@adguard/agtree": "^2.1.4",
+    "@adguard/agtree": "^3.4.3",
     "commander": "^12.1.0",
     "yaml": "^2.6.1"
   },
