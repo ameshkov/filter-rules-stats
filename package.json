@@ -1,0 +1,36 @@
+{
+  "name": "filter-rules-stats",
+  "version": "1.0.0",
+  "description": "A tool that analyzes ad-blocking filter lists and generates statistical reports",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "filter-rules-stats": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "tsc --noEmit"
+  },
+  "keywords": ["adblock", "filter-lists", "statistics", "agtree"],
+  "author": "",
+  "license": "MIT",
+  "packageManager": "pnpm@10.14.0",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@adguard/agtree": "^2.1.4",
+    "commander": "^12.1.0",
+    "yaml": "^2.6.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

@@ -1,0 +1,212 @@
+groups:
+  - name: EasyList
+    urls:
+      - https://easylist.to/easylist/easylist.txt
+
+  - name: EasyPrivacy
+    urls:
+      - https://easylist.to/easylist/easyprivacy.txt
+
+  - name: AdGuard Recommended Core filters combined (base+privacy+social+annoyances)
+    urls:
+      - https://filters.adtidy.org/windows/filters/2.txt
+      - https://filters.adtidy.org/windows/filters/3.txt
+      - https://filters.adtidy.org/windows/filters/4.txt
+      - https://filters.adtidy.org/windows/filters/11.txt
+      - https://filters.adtidy.org/windows/filters/18.txt
+      - https://filters.adtidy.org/windows/filters/19.txt
+      - https://filters.adtidy.org/windows/filters/20.txt
+      - https://filters.adtidy.org/windows/filters/21.txt
+      - https://filters.adtidy.org/windows/filters/22.txt
+
+  - name: AdGuard Base filter
+    urls:
+      - https://filters.adtidy.org/windows/filters/2.txt
+
+  - name: AdGuard Russian filter
+    urls:
+      - https://filters.adtidy.org/windows/filters/1.txt
+
+  - name: AdGuard Tracking Protection filter
+    urls:
+      - https://filters.adtidy.org/windows/filters/3.txt
+
+  - name: AdGuard Social Media filter
+    urls:
+      - https://filters.adtidy.org/windows/filters/4.txt
+
+  - name: AdGuard German filter
+    urls:
+      - https://filters.adtidy.org/windows/filters/6.txt
+
+  - name: AdGuard Japanese filter
+    urls:
+      - https://filters.adtidy.org/windows/filters/7.txt
+
+  - name: AdGuard Dutch filter
+    urls:
+      - https://filters.adtidy.org/windows/filters/8.txt
+
+  - name: AdGuard Spanish/Portuguese filter
+    urls:
+      - https://filters.adtidy.org/windows/filters/9.txt
+
+  - name: AdGuard Mobile Ads filter
+    urls:
+      - https://filters.adtidy.org/windows/filters/11.txt
+
+  - name: AdGuard Turkish filter
+    urls:
+      - https://filters.adtidy.org/windows/filters/13.txt
+
+  - name: AdGuard French filter
+    urls:
+      - https://filters.adtidy.org/windows/filters/16.txt
+
+  - name: AdGuard Cookie Notices filter
+    urls:
+      - https://filters.adtidy.org/windows/filters/18.txt
+
+  - name: AdGuard Popups filter
+    urls:
+      - https://filters.adtidy.org/windows/filters/19.txt
+
+  - name: AdGuard Mobile App Banners filter
+    urls:
+      - https://filters.adtidy.org/windows/filters/20.txt
+
+  - name: AdGuard Other Annoyances filter
+    urls:
+      - https://filters.adtidy.org/windows/filters/21.txt
+
+  - name: AdGuard Widgets filter
+    urls:
+      - https://filters.adtidy.org/windows/filters/22.txt
+
+  - name: AdGuard Ukrainian filter
+    urls:
+      - https://filters.adtidy.org/windows/filters/23.txt
+
+  - name: Bulgarian list
+    urls:
+      - https://filters.adtidy.org/windows/filters/103.txt
+
+  - name: EasyList Czech and Slovak
+    urls:
+      - https://filters.adtidy.org/windows/filters/105.txt
+
+  - name: EasyList Hebrew
+    urls:
+      - https://filters.adtidy.org/windows/filters/108.txt
+
+  - name: EasyList Italy
+    urls:
+      - https://filters.adtidy.org/windows/filters/109.txt
+
+  - name: EasyList Lithuania
+    urls:
+      - https://filters.adtidy.org/windows/filters/110.txt
+
+  - name: Latvian List
+    urls:
+      - https://filters.adtidy.org/windows/filters/111.txt
+
+  - name: Liste AR
+    urls:
+      - https://filters.adtidy.org/windows/filters/112.txt
+
+  - name: AdBlockID
+    urls:
+      - https://filters.adtidy.org/windows/filters/120.txt
+
+  - name: EasyList Thailand
+    urls:
+      - https://filters.adtidy.org/windows/filters/202.txt
+
+  - name: Hungarian filter
+    urls:
+      - https://filters.adtidy.org/windows/filters/203.txt
+
+  - name: Online Malicious URL Blocklist
+    urls:
+      - https://filters.adtidy.org/windows/filters/208.txt
+
+  - name: ABPVN List
+    urls:
+      - https://filters.adtidy.org/windows/filters/214.txt
+
+  - name: Official Polish filters for AdBlock, uBlock Origin & AdGuard
+    urls:
+      - https://filters.adtidy.org/windows/filters/216.txt
+
+  - name: Estonian List
+    urls:
+      - https://filters.adtidy.org/windows/filters/218.txt
+
+  - name: AdGuard Chinese filter
+    urls:
+      - https://filters.adtidy.org/windows/filters/224.txt
+
+  - name: List-KR
+    urls:
+      - https://filters.adtidy.org/windows/filters/227.txt
+
+  - name: Adblock List for Finland
+    urls:
+      - https://filters.adtidy.org/windows/filters/233.txt
+
+  - name: Persian Blocker
+    urls:
+      - https://filters.adtidy.org/windows/filters/235.txt
+
+  - name: Polish Anti Adblock Filters
+    urls:
+      - https://filters.adtidy.org/windows/filters/238.txt
+
+  - name: Frellwit's Swedish Filter
+    urls:
+      - https://filters.adtidy.org/windows/filters/243.txt
+
+  - name: Dandelion Sprout's Nordic Filters
+    urls:
+      - https://filters.adtidy.org/windows/filters/249.txt
+
+  - name: Dandelion Sprout's Serbo-Croatian List
+    urls:
+      - https://filters.adtidy.org/windows/filters/252.txt
+
+  - name: IndianList
+    urls:
+      - https://filters.adtidy.org/windows/filters/253.txt
+
+  - name: Macedonian adBlock Filters
+    urls:
+      - https://filters.adtidy.org/windows/filters/254.txt
+
+  - name: uBlock filters - Default filters combined
+    urls:
+      - https://raw.githubusercontent.com/uBlockOrigin/uAssetsCDN/main/filters/filters.min.txt
+      - https://raw.githubusercontent.com/uBlockOrigin/uAssetsCDN/main/filters/privacy.min.txt
+      - https://raw.githubusercontent.com/uBlockOrigin/uAssetsCDN/main/filters/badware.txt
+      - https://raw.githubusercontent.com/uBlockOrigin/uAssetsCDN/main/filters/quick-fixes.txt
+      - https://raw.githubusercontent.com/uBlockOrigin/uAssetsCDN/main/filters/unbreak.txt
+
+  - name: uBlock filters - Ads
+    urls:
+      - https://raw.githubusercontent.com/uBlockOrigin/uAssetsCDN/main/filters/filters.min.txt
+
+  - name: uBlock filters - Privacy
+    urls:
+      - https://raw.githubusercontent.com/uBlockOrigin/uAssetsCDN/main/filters/privacy.min.txt
+
+  - name: uBlock filters - Badware risks
+    urls:
+      - https://raw.githubusercontent.com/uBlockOrigin/uAssetsCDN/main/filters/badware.txt
+
+  - name: uBlock filters - Quick fixes
+    urls:
+      - https://raw.githubusercontent.com/uBlockOrigin/uAssetsCDN/main/filters/quick-fixes.txt
+
+  - name: uBlock filters - Unbreak
+    urls:
+      - https://raw.githubusercontent.com/uBlockOrigin/uAssetsCDN/main/filters/unbreak.txt
