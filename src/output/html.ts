@@ -1,6 +1,6 @@
 import { writeFile, mkdir } from 'node:fs/promises';
 import { dirname } from 'node:path';
-import type { Statistics, GroupStatistics } from '../types/index.js';
+import type { Statistics, GroupStatistics, DomainModifierStats } from '../types/index.js';
 
 function escapeHtml(text: string): string {
   return text
@@ -34,7 +34,7 @@ function generateSummaryTable(groups: GroupStatistics[]): string {
       <td>${cosmeticTotal.toLocaleString()}</td>
       <td>${scriptletTotal.toLocaleString()}</td>
         <td>${scriptTotal.toLocaleString()}</td>
-      <td>${Object.keys(g.modifiers).length.toLocaleString()}</td>
+      <td>${Object.keys(g.modifiers.counts).length.toLocaleString()}</td>
       <td>${g.errors.length > 0 ? `<span class="error-badge">${g.errors.length}</span>` : '-'}</td>
     </tr>`;
   }).join('\n');
@@ -76,8 +76,27 @@ function generateGroupSection(group: GroupStatistics, index: number): string {
     const scriptTotal = ruleTypes.script.rules + ruleTypes.script.exceptions;
   const htmlTotal = ruleTypes.htmlFiltering.rules + ruleTypes.htmlFiltering.exceptions;
 
-  const modifierRows = sortByCount(modifiers)
+  const modifierRows = sortByCount(modifiers.counts)
     .map(([name, count]) => `<tr><td>${escapeHtml(name)}</td><td>${count.toLocaleString()}</td></tr>`)
+    .join('\n');
+
+  const domainModifierNames = ['domain', 'to', 'from', 'denyallow'];
+  const domainModifierRows = domainModifierNames
+    .filter(name => {
+      const stats = modifiers.domainModifiers[name];
+      return stats && (stats.plain > 0 || stats.tld > 0 || stats.regex > 0);
+    })
+    .map(name => {
+      const stats = modifiers.domainModifiers[name];
+      const total = stats.plain + stats.tld + stats.regex;
+      return `<tr>
+        <td>${escapeHtml(name)}</td>
+        <td>${total.toLocaleString()}</td>
+        <td>${stats.plain.toLocaleString()}</td>
+        <td>${stats.tld.toLocaleString()}</td>
+        <td>${stats.regex.toLocaleString()}</td>
+      </tr>`;
+    })
     .join('\n');
 
   const scriptletRows = sortByCount(scriptlets.byName)
@@ -106,7 +125,7 @@ function generateGroupSection(group: GroupStatistics, index: number): string {
           <summary>Rule Types</summary>
           <table class="data-table">
             <thead>
-              <tr><th>Category</th><th>Type</th><th>Count</th></tr>
+              <tr><th>Category</th><th>Type</th><th>Rules Count</th></tr>
             </thead>
             <tbody>
               <tr><td>Network</td><td>Blocking</td><td>${ruleTypes.network.blocking.toLocaleString()}</td></tr>
@@ -128,15 +147,30 @@ function generateGroupSection(group: GroupStatistics, index: number): string {
           </table>
         </details>
 
-        ${Object.keys(modifiers).length > 0 ? `
+        ${Object.keys(modifiers.counts).length > 0 ? `
         <details class="subsection">
-          <summary>Modifiers (${Object.keys(modifiers).length})</summary>
+          <summary>Modifiers (${Object.keys(modifiers.counts).length})</summary>
           <table class="data-table">
             <thead>
-              <tr><th>Modifier</th><th>Count</th></tr>
+              <tr><th>Modifier</th><th>Rules Count</th></tr>
             </thead>
             <tbody>
               ${modifierRows}
+            </tbody>
+          </table>
+        </details>
+        ` : ''}
+
+        ${domainModifierRows.length > 0 ? `
+        <details class="subsection">
+          <summary>Domain Modifiers Breakdown</summary>
+          <p class="subsection-description">Breakdown of domain values by syntax type: plain domains, TLD wildcards (example.*), and regex (/pattern/)</p>
+          <table class="data-table">
+            <thead>
+              <tr><th>Modifier</th><th>Total Domains</th><th>Plain</th><th>TLD (*)</th><th>Regex</th></tr>
+            </thead>
+            <tbody>
+              ${domainModifierRows}
             </tbody>
           </table>
         </details>
@@ -152,8 +186,7 @@ function generateGroupSection(group: GroupStatistics, index: number): string {
           </div>
           <table class="data-table">
             <thead>
-              <tr><th>Scriptlet</th>
-            <th>Script</th><th>Count</th></tr>
+              <tr><th>Scriptlet</th><th>Rules Count</th></tr>
             </thead>
             <tbody>
               ${scriptletRows}
@@ -167,7 +200,7 @@ function generateGroupSection(group: GroupStatistics, index: number): string {
           <summary>Redirects (${redirects.total.toLocaleString()})</summary>
           <table class="data-table">
             <thead>
-              <tr><th>Resource</th><th>Count</th></tr>
+              <tr><th>Resource</th><th>Rules Count</th></tr>
             </thead>
             <tbody>
               ${redirectRows}
@@ -190,7 +223,7 @@ function generateGroupSection(group: GroupStatistics, index: number): string {
   `;
 }
 
-function generateHtml(stats: Statistics): string {
+export function generateHtml(stats: Statistics): string {
   const sections = stats.groups
     .map((g, i) => generateGroupSection(g, i))
     .join('\n');
@@ -449,7 +482,6 @@ function generateHtml(stats: Statistics): string {
     }
 
     .data-table td:last-child {
-      text-align: right;
       font-family: monospace;
     }
 
@@ -477,6 +509,13 @@ function generateHtml(stats: Statistics): string {
 
     .errors-section > summary {
       color: var(--warning);
+    }
+
+    .subsection-description {
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
     }
 
     footer {

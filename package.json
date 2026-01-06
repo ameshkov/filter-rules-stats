@@ -5,12 +5,14 @@
   "type": "module",
   "main": "dist/index.js",
   "bin": {
-    "filter-rules-stats": "./dist/index.js"
+    "filter-rules-stats": "./dist/index.js",
+    "build-html": "./dist/build-html.js"
   },
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "tsx src/index.ts",
+    "build-html": "tsx src/build-html.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "tsc --noEmit"

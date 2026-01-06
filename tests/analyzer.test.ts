@@ -59,15 +59,59 @@ describe('Analyzer', () => {
         '||example.com^$third-party',
         '||test.com^$script,third-party',
       ]);
-      const counts = countModifiers(asts);
-      expect(counts['third-party']).toBe(2);
-      expect(counts['script']).toBe(1);
+      const stats = countModifiers(asts);
+      expect(stats.counts['third-party']).toBe(2);
+      expect(stats.counts['script']).toBe(1);
     });
 
-    it('should return empty object for rules without modifiers', () => {
+    it('should return empty counts for rules without modifiers', () => {
       const asts = parseToAsts(['||example.com^']);
-      const counts = countModifiers(asts);
-      expect(Object.keys(counts).length).toBe(0);
+      const stats = countModifiers(asts);
+      expect(Object.keys(stats.counts).length).toBe(0);
+    });
+
+    it('should track plain domain modifiers', () => {
+      const asts = parseToAsts(['||example.com^$domain=test.com|other.org']);
+      const stats = countModifiers(asts);
+      expect(stats.domainModifiers['domain'].plain).toBe(2);
+      expect(stats.domainModifiers['domain'].tld).toBe(0);
+      expect(stats.domainModifiers['domain'].regex).toBe(0);
+    });
+
+    it('should track TLD domain modifiers', () => {
+      const asts = parseToAsts(['||example.com^$domain=test.*|example.*']);
+      const stats = countModifiers(asts);
+      expect(stats.domainModifiers['domain'].plain).toBe(0);
+      expect(stats.domainModifiers['domain'].tld).toBe(2);
+      expect(stats.domainModifiers['domain'].regex).toBe(0);
+    });
+
+    it('should track regex domain modifiers', () => {
+      const asts = parseToAsts(['||example.com^$domain=/test/|/pattern/']);
+      const stats = countModifiers(asts);
+      expect(stats.domainModifiers['domain'].plain).toBe(0);
+      expect(stats.domainModifiers['domain'].tld).toBe(0);
+      expect(stats.domainModifiers['domain'].regex).toBe(2);
+    });
+
+    it('should track mixed domain modifier types', () => {
+      const asts = parseToAsts(['||example.com^$domain=plain.com|tld.*|/regex/']);
+      const stats = countModifiers(asts);
+      expect(stats.domainModifiers['domain'].plain).toBe(1);
+      expect(stats.domainModifiers['domain'].tld).toBe(1);
+      expect(stats.domainModifiers['domain'].regex).toBe(1);
+    });
+
+    it('should track $to modifier domain types', () => {
+      const asts = parseToAsts(['||example.com^$to=test.*']);
+      const stats = countModifiers(asts);
+      expect(stats.domainModifiers['to'].tld).toBe(1);
+    });
+
+    it('should track $denyallow modifier domain types', () => {
+      const asts = parseToAsts(['||example.com^$denyallow=test.com']);
+      const stats = countModifiers(asts);
+      expect(stats.domainModifiers['denyallow'].plain).toBe(1);
     });
   });
 
@@ -98,6 +142,14 @@ describe('Analyzer', () => {
       const asts = parseToAsts(['||example.com^']);
       const stats = analyzeRedirects(asts);
       expect(stats.total).toBe(0);
+    });
+
+    it('should strip uBlock Origin redirect priority', () => {
+      const asts = parseToAsts(['||example.com^$redirect=noopjs:42']);
+      const stats = analyzeRedirects(asts);
+      expect(stats.total).toBe(1);
+      expect(stats.byResource['noopjs']).toBe(1);
+      expect(stats.byResource['noopjs:42']).toBeUndefined();
     });
   });
 });

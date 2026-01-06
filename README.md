@@ -71,6 +71,25 @@ pnpm run start -- --output ./reports
 pnpm run start -- --json-only --verbose
 ```
 
+### Build HTML from JSON
+
+If you already have a `stats.json` file and want to regenerate the HTML report:
+
+```bash
+# Development mode
+pnpm run build-html -i stats.json -o report.html
+
+# After building the project
+build-html -i stats.json -o report.html
+```
+
+**Options:**
+
+| Option               | Description                                        |
+|----------------------|----------------------------------------------------|
+| `-i, --input <path>` | Path to input JSON file (required)                 |
+| `-o, --output <path>`| Path to output HTML file (default: `index.html`)   |
+
 ## Configuration
 
 Create a `config.yaml` file to define the filter lists to analyze:

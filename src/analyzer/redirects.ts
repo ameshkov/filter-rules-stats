@@ -33,7 +33,9 @@ function extractRedirectResource(ast: AnyRule): string | null {
   for (const mod of rule.modifiers.children) {
     const modName = mod.name?.value;
     if (modName && REDIRECT_MODIFIERS.includes(modName)) {
-      return mod.value?.value || 'unknown';
+      const value = mod.value?.value || 'unknown';
+      // Strip uBlock Origin redirect priority (e.g., "noopjs:42" -> "noopjs")
+      return value.split(':')[0];
     }
   }
 

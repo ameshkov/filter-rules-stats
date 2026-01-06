@@ -50,11 +50,22 @@ export interface RedirectStats {
   byResource: Record<string, number>;
 }
 
+export interface DomainModifierStats {
+  plain: number;
+  tld: number;
+  regex: number;
+}
+
+export interface ModifierStats {
+  counts: Record<string, number>;
+  domainModifiers: Record<string, DomainModifierStats>;
+}
+
 export interface GroupStatistics {
   name: string;
   totalRules: number;
   ruleTypes: RuleTypeCounts;
-  modifiers: Record<string, number>;
+  modifiers: ModifierStats;
   scriptlets: ScriptletStats;
   redirects: RedirectStats;
   errors: string[];

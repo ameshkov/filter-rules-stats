@@ -73,7 +73,7 @@ async function processGroup(name: string, urls: string[]): Promise<GroupStatisti
         preprocessor: 0,
         invalid: 0,
       },
-      modifiers: {},
+      modifiers: { counts: {}, domainModifiers: { domain: { plain: 0, tld: 0, regex: 0 }, to: { plain: 0, tld: 0, regex: 0 }, from: { plain: 0, tld: 0, regex: 0 }, denyallow: { plain: 0, tld: 0, regex: 0 } } },
       scriptlets: { total: 0, byName: {}, bySyntax: { adguard: 0, ublock: 0, abp: 0 } },
       redirects: { total: 0, byResource: {} },
       errors: downloadErrors,
