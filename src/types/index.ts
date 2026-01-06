@@ -50,6 +50,18 @@ export interface RedirectStats {
   byResource: Record<string, number>;
 }
 
+export interface NetworkPatternCounts {
+  domainOnly: number;
+  domainPath: number;
+  regex: number;
+  urlPart: number;
+}
+
+export interface NetworkPatternStats {
+  blocking: NetworkPatternCounts;
+  exception: NetworkPatternCounts;
+}
+
 export interface DomainModifierStats {
   plain: number;
   tld: number;
@@ -63,11 +75,13 @@ export interface ModifierStats {
 
 export interface GroupStatistics {
   name: string;
+  sourceUrls: string[];
   totalRules: number;
   ruleTypes: RuleTypeCounts;
   modifiers: ModifierStats;
   scriptlets: ScriptletStats;
   redirects: RedirectStats;
+  networkPatterns: NetworkPatternStats;
   errors: string[];
 }
 

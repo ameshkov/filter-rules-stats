@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { parseRules } from '../src/parser/index.js';
-import { countRuleTypes, countModifiers, analyzeScriptlets, analyzeRedirects } from '../src/analyzer/index.js';
+import { countRuleTypes, countModifiers, analyzeScriptlets, analyzeRedirects, analyzeNetworkPatterns } from '../src/analyzer/index.js';
 import type { AnyRule } from '@adguard/agtree';
 
 function parseToAsts(rules: string[]): (AnyRule | null)[] {
@@ -150,6 +150,64 @@ describe('Analyzer', () => {
       expect(stats.total).toBe(1);
       expect(stats.byResource['noopjs']).toBe(1);
       expect(stats.byResource['noopjs:42']).toBeUndefined();
+    });
+  });
+
+  describe('analyzeNetworkPatterns', () => {
+    it('should classify domain-only blocking patterns', () => {
+      const asts = parseToAsts(['||example.org^', '||test.com^$third-party']);
+      const stats = analyzeNetworkPatterns(asts);
+      expect(stats.blocking.domainOnly).toBe(2);
+    });
+
+    it('should classify domain+path blocking patterns', () => {
+      const asts = parseToAsts(['||example.org/somepath', '||test.com/ads/banner.js']);
+      const stats = analyzeNetworkPatterns(asts);
+      expect(stats.blocking.domainPath).toBe(2);
+    });
+
+    it('should classify regex blocking patterns', () => {
+      const asts = parseToAsts(['/ads\\.js/', '/tracking[0-9]+/']);
+      const stats = analyzeNetworkPatterns(asts);
+      expect(stats.blocking.regex).toBe(2);
+    });
+
+    it('should classify URL part blocking patterns', () => {
+      const asts = parseToAsts(['ads', 'banner.gif', '*tracking*']);
+      const stats = analyzeNetworkPatterns(asts);
+      expect(stats.blocking.urlPart).toBe(3);
+    });
+
+    it('should classify exception patterns separately', () => {
+      const asts = parseToAsts([
+        '@@||example.org^',
+        '@@||test.com/path',
+        '@@/regex/',
+        '@@urlpart',
+      ]);
+      const stats = analyzeNetworkPatterns(asts);
+      expect(stats.exception.domainOnly).toBe(1);
+      expect(stats.exception.domainPath).toBe(1);
+      expect(stats.exception.regex).toBe(1);
+      expect(stats.exception.urlPart).toBe(1);
+      expect(stats.blocking.domainOnly).toBe(0);
+    });
+
+    it('should handle mixed blocking and exception patterns', () => {
+      const asts = parseToAsts([
+        '||example.org^',
+        '@@||example.org^',
+      ]);
+      const stats = analyzeNetworkPatterns(asts);
+      expect(stats.blocking.domainOnly).toBe(1);
+      expect(stats.exception.domainOnly).toBe(1);
+    });
+
+    it('should ignore non-network rules', () => {
+      const asts = parseToAsts(['##.ad', '! comment']);
+      const stats = analyzeNetworkPatterns(asts);
+      expect(stats.blocking.domainOnly).toBe(0);
+      expect(stats.exception.domainOnly).toBe(0);
     });
   });
 });

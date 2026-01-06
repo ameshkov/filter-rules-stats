@@ -64,7 +64,7 @@ function generateSummaryTable(groups: GroupStatistics[]): string {
 }
 
 function generateGroupSection(group: GroupStatistics, index: number): string {
-  const { ruleTypes, modifiers, scriptlets, redirects } = group;
+  const { ruleTypes, modifiers, scriptlets, redirects, networkPatterns } = group;
 
   const networkTotal = ruleTypes.network.blocking + ruleTypes.network.exception;
   const cosmeticTotal =
@@ -121,6 +121,14 @@ function generateGroupSection(group: GroupStatistics, index: number): string {
       </summary>
 
       <div class="group-content">
+        ${group.sourceUrls.length > 0 ? `
+        <details class="subsection">
+          <summary>Sources (${group.sourceUrls.length})</summary>
+          <ul class="source-list">
+            ${group.sourceUrls.map(url => `<li><a href="${escapeHtml(url)}" target="_blank" rel="noopener">${escapeHtml(url)}</a></li>`).join('\n            ')}
+          </ul>
+        </details>
+        ` : ''}
         <details class="subsection" open>
           <summary>Rule Types</summary>
           <table class="data-table">
@@ -146,6 +154,23 @@ function generateGroupSection(group: GroupStatistics, index: number): string {
             </tbody>
           </table>
         </details>
+
+        ${networkTotal > 0 ? `
+        <details class="subsection">
+          <summary>Network Pattern Breakdown</summary>
+          <table class="data-table">
+            <thead>
+              <tr><th>Pattern Type</th><th>Example</th><th>Blocking</th><th>Exception</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Domain Only</td><td>||example.org^</td><td>${networkPatterns.blocking.domainOnly.toLocaleString()}</td><td>${networkPatterns.exception.domainOnly.toLocaleString()}</td></tr>
+              <tr><td>Domain+Path</td><td>||example.org/path</td><td>${networkPatterns.blocking.domainPath.toLocaleString()}</td><td>${networkPatterns.exception.domainPath.toLocaleString()}</td></tr>
+              <tr><td>Regex</td><td>/regex/</td><td>${networkPatterns.blocking.regex.toLocaleString()}</td><td>${networkPatterns.exception.regex.toLocaleString()}</td></tr>
+              <tr><td>URL Part</td><td>ads (other patterns)</td><td>${networkPatterns.blocking.urlPart.toLocaleString()}</td><td>${networkPatterns.exception.urlPart.toLocaleString()}</td></tr>
+            </tbody>
+          </table>
+        </details>
+        ` : ''}
 
         ${Object.keys(modifiers.counts).length > 0 ? `
         <details class="subsection">
@@ -505,6 +530,26 @@ export function generateHtml(stats: Statistics): string {
     .error-list li {
       margin-bottom: 0.4rem;
       color: var(--error);
+    }
+
+    .source-list {
+      padding: 1rem;
+      list-style: none;
+    }
+
+    .source-list li {
+      margin-bottom: 0.4rem;
+      font-size: 0.85rem;
+    }
+
+    .source-list a {
+      color: var(--accent);
+      text-decoration: none;
+      word-break: break-all;
+    }
+
+    .source-list a:hover {
+      text-decoration: underline;
     }
 
     .errors-section > summary {

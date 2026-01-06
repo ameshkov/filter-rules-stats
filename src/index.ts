@@ -57,6 +57,7 @@ async function processGroup(name: string, urls: string[]): Promise<GroupStatisti
     log('error', `No filter lists downloaded for group: ${name}`);
     return {
       name,
+      sourceUrls: urls,
       totalRules: 0,
       ruleTypes: {
         network: { blocking: 0, exception: 0 },
@@ -76,6 +77,7 @@ async function processGroup(name: string, urls: string[]): Promise<GroupStatisti
       modifiers: { counts: {}, domainModifiers: { domain: { plain: 0, tld: 0, regex: 0 }, to: { plain: 0, tld: 0, regex: 0 }, from: { plain: 0, tld: 0, regex: 0 }, denyallow: { plain: 0, tld: 0, regex: 0 } } },
       scriptlets: { total: 0, byName: {}, bySyntax: { adguard: 0, ublock: 0, abp: 0 } },
       redirects: { total: 0, byResource: {} },
+      networkPatterns: { blocking: { domainOnly: 0, domainPath: 0, regex: 0, urlPart: 0 }, exception: { domainOnly: 0, domainPath: 0, regex: 0, urlPart: 0 } },
       errors: downloadErrors,
     };
   }
@@ -89,7 +91,7 @@ async function processGroup(name: string, urls: string[]): Promise<GroupStatisti
   log('debug', `Parse errors: ${parseResult.errors.length}`);
 
   log('info', 'Analyzing statistics...');
-  const stats = analyzeGroup(name, parseResult.rules, [
+  const stats = analyzeGroup(name, urls, parseResult.rules, [
     ...downloadErrors,
     ...parseResult.errors,
   ]);
